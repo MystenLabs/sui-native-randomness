@@ -66,28 +66,35 @@ module small_raffle::small_raffle {
     /// functions are allowed, the calling function might abort the transaction depending on the winner.)
     /// Gas based attacks are not possible since the gas cost of this function is independent of the winner.
     entry fun close(
-        game: Game, 
-        r: &Random, 
-        clock: &Clock, 
+        game: Game,
+        r: &Random,
+        clock: &Clock,
         ctx: &mut TxContext
     ) {
         assert!(game.end_time <= clock::timestamp_ms(clock), EGameInProgress);
         let Game { id, cost_in_sui: _, participants, end_time: _, balance, mut participants_table } = game;
-        if (participants > 0) {
+        
+        if (participants == 1) {
+            let winner = 1;
+            let winner_address = *table::borrow(&participants_table, winner);
+            let reward = coin::from_balance(balance, ctx);
+            transfer::public_transfer(reward, winner_address);
+        } else if (participants > 1) {
             let mut generator = new_generator(r, ctx);
             let winner = random::generate_u32_in_range(&mut generator, 1, participants);
             let winner_address = *table::borrow(&participants_table, winner);
             let reward = coin::from_balance(balance, ctx);
             transfer::public_transfer(reward, winner_address);
+
+            let mut i = 1;
+            while (i <= participants) {
+                table::remove(&mut participants_table, i);
+                i = i + 1;
+            };
         } else {
             balance::destroy_zero(balance);
         };
 
-        let mut i = 1;
-        while (i <= participants) {
-            table::remove(&mut participants_table, i);
-            i = i + 1;
-        };
         table::destroy_empty(participants_table);
         object::delete(id);
     }

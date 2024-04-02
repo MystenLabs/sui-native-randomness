@@ -2,7 +2,6 @@ import { TransactionBlock } from "@mysten/sui.js/transactions";
 import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
 import { SuiClient } from "@mysten/sui.js/client";
 import * as dotenv from "dotenv";
-import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui.js/dist/cjs/utils";
 
 (async () => {
   dotenv.config({ path: "../.env" });
@@ -25,10 +24,10 @@ import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui.js/dist/cjs/utils";
     target: `${packageId}::${moduleName}::close`,
     arguments: [
       transactionBlock.object(
-        "0xcf9613a59508a079c349c8be8400570d24e86c951b9521e2d2a26bf8ca2fe182"
+        "0x15cbd693f7d390f9f066276750866fd578afeeccd132e39d4fd3ad1a3efbc29a"
       ), // game: Game
       transactionBlock.object("0x8"), // r: &Random
-      transactionBlock.object(SUI_CLOCK_OBJECT_ID), // clock: &Clock
+      transactionBlock.object("0x6"), // clock: &Clock,
     ],
   });
 

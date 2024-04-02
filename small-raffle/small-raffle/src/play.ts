@@ -30,7 +30,7 @@ import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui.js/utils";
     target: `${packageId}::${moduleName}::play`,
     arguments: [
       transactionBlock.object(
-        "0xcf9613a59508a079c349c8be8400570d24e86c951b9521e2d2a26bf8ca2fe182"
+        "0xdb79a8460e49c2691eed17db14d99f0cb041577053d149d44308ba6591ff506f"
       ), // game: &mut Game
       transactionBlock.object(feeCoin), // coin: Coin<SUI>
       transactionBlock.object(SUI_CLOCK_OBJECT_ID), // clock: &Clock

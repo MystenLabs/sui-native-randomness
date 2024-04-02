@@ -6,7 +6,7 @@ import * as dotenv from "dotenv";
 (async () => {
   dotenv.config({ path: "../.env" });
 
-  const oneMinute = 10 * 60 * 1000; // 1 minute in milliseconds
+  const oneMinute = 1 * 60 * 1000; // 1 minute in milliseconds
 
   const phrase = process.env.ADMIN_PHRASE;
   const keypair = Ed25519Keypair.deriveKeypair(phrase!);
