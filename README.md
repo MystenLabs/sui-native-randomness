@@ -1,6 +1,6 @@
 # SUI Native Randomness
 
-This repository contains the implementation of two SUI smart contracts that demonstrate the process of generating random numbers within the SUI framework. It is designed to provide a straightforward way to incorporate randomness into your applications.
+This repository contains the implementation of two SUI smart contracts that demonstrate the process of generating random numbers within the SUI framework. It is designed to provide a straightforward way to incorporate randomness into your contracts.
 
 ## [Roll Dice](roll-dice)
 
