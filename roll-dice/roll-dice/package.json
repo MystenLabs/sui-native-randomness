@@ -1,0 +1,22 @@
+{
+  "name": "roll-dice",
+  "version": "0.0.1",
+  "description": "roll-dice",
+  "scripts": {
+    "build": "npx tsc",
+    "init": "node dist/init.js",
+    "start": "node dist/index.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "env-cmd": "^10.1.0",
+    "gts": "^5.2.0",
+    "prettier": "3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@mysten/sui.js": "^0.48.1",
+    "dotenv": "^16.3.1"
+  }
+}
