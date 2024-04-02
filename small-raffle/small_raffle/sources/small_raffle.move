@@ -1,5 +1,7 @@
 
 /// Module: small_raffle
+/// This module implements a simple raffle game where participants can join by paying an entry fee in SUI.
+/// At the end of the game, a winner is randomly selected among the participants, and the balance is transferred to the winner.
 module small_raffle::small_raffle {
     use sui::balance::{Self, Balance};
     use sui::clock::{Self, Clock};
@@ -28,6 +30,11 @@ module small_raffle::small_raffle {
     }
 
     /// Create a shared-object Game.
+    ///
+    /// Parameters:
+    /// - end_time: Timestamp when the game ends.
+    /// - cost_in_sui: Cost in SUI to participate in the raffle.
+    /// - ctx: Transaction context.
     public fun create(
         end_time: u64,
         cost_in_sui: u64,
@@ -45,6 +52,12 @@ module small_raffle::small_raffle {
     }
 
     /// Anyone can play.
+    ///
+    /// Parameters:
+    /// - game: Reference to the game being played.
+    /// - coin: Coin used to participate in the game.
+    /// - clock: Current timestamp.
+    /// - ctx: Transaction context.
     public fun play(
         game: &mut Game, 
         coin: Coin<SUI>, 
@@ -65,6 +78,12 @@ module small_raffle::small_raffle {
     /// The function is defined as private entry to prevent calls from other Move functions. (If calls from other
     /// functions are allowed, the calling function might abort the transaction depending on the winner.)
     /// Gas based attacks are not possible since the gas cost of this function is independent of the winner.
+    ///
+    /// Parameters:
+    /// - game: Game object to be closed.
+    /// - r: Random number generator.
+    /// - clock: Current block timestamp.
+    /// - ctx: Transaction context.
     entry fun close(
         game: Game,
         r: &Random,
