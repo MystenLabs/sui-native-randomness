@@ -1,0 +1,22 @@
+{
+  "name": "small-raffle",
+  "version": "0.0.1",
+  "description": "small-raffle",
+  "scripts": {
+    "build": "npx tsc",
+    "init": "node dist/init.js",
+    "start": "node dist/index.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.12.2",
+    "env-cmd": "^10.1.0",
+    "gts": "^5.3.0",
+    "prettier": "3.2.5",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@mysten/sui.js": "^0.51.1",
+    "dotenv": "^16.4.5"
+  }
+}
