@@ -98,6 +98,7 @@ module small_raffle::small_raffle {
             let winner_address = *table::borrow(&participants_table, winner);
             let reward = coin::from_balance(balance, ctx);
             transfer::public_transfer(reward, winner_address);
+            table::remove(&mut participants_table, 1);
         } else if (participants > 1) {
             let mut generator = new_generator(r, ctx);
             let winner = random::generate_u32_in_range(&mut generator, 1, participants);

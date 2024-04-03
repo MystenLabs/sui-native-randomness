@@ -21,8 +21,6 @@ import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui.js/utils";
 
   let transactionBlock = new TransactionBlock();
 
-  // transactionBlock.splitCoins(coin: "", amounts: 1000);
-
   const [feeCoin] = transactionBlock.splitCoins(transactionBlock.gas, [
     transactionBlock.pure(100_000_000),
   ]);
@@ -30,7 +28,7 @@ import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui.js/utils";
     target: `${packageId}::${moduleName}::play`,
     arguments: [
       transactionBlock.object(
-        "0xdb79a8460e49c2691eed17db14d99f0cb041577053d149d44308ba6591ff506f"
+        "0xdf4273ed5c0f90fecc40af54f9d37ac86c44e54588dc52da27bf9cd5e64e8b48"
       ), // game: &mut Game
       transactionBlock.object(feeCoin), // coin: Coin<SUI>
       transactionBlock.object(SUI_CLOCK_OBJECT_ID), // clock: &Clock
