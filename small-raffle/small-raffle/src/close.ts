@@ -1,6 +1,7 @@
-import { TransactionBlock } from "@mysten/sui.js/transactions";
-import { Ed25519Keypair } from "@mysten/sui.js/keypairs/ed25519";
-import { SuiClient } from "@mysten/sui.js/client";
+import { SuiClient } from "@mysten/sui/client";
+import { Ed25519Keypair } from "@mysten/sui/keypairs/ed25519";
+import { Transaction } from "@mysten/sui/transactions";
+import { SUI_CLOCK_OBJECT_ID } from "@mysten/sui/utils";
 import * as dotenv from "dotenv";
 
 (async () => {
@@ -10,32 +11,37 @@ import * as dotenv from "dotenv";
   const keypair = Ed25519Keypair.deriveKeypair(phrase!);
 
   // Client
-  const fullnode = process.env.FULLNODE!;
+  const fullnode = process.env.SUI_NETWORK!;
   const client = new SuiClient({
     url: fullnode,
   });
 
-  const packageId = process.env.PACKAGE_ID;
+  const packageId = process.env.PACKAGE_ADDRESS;
   const moduleName = "small_raffle";
 
-  let transactionBlock = new TransactionBlock();
+  let transaction = new Transaction();
 
-  transactionBlock.moveCall({
+  transaction.moveCall({
     target: `${packageId}::${moduleName}::close`,
     arguments: [
-      transactionBlock.object(
+      transaction.object(
         "0x15cbd693f7d390f9f066276750866fd578afeeccd132e39d4fd3ad1a3efbc29a"
       ), // game: Game
-      transactionBlock.object("0x8"), // r: &Random
-      transactionBlock.object("0x6"), // clock: &Clock,
+      transaction.object("0x8"), // r: &Random
+      transaction.object(SUI_CLOCK_OBJECT_ID), // clock: &Clock
     ],
   });
 
   try {
-    await client.signAndExecuteTransactionBlock({
-      transactionBlock: transactionBlock,
-      signer: keypair,
-    });
+    await client
+      .signAndExecuteTransaction({
+        transaction: transaction,
+        signer: keypair,
+      })
+      .then((response) => {
+        console.log("Transaction response: ", response);
+        console.log("Transaction digest: ", response.digest);
+      });
   } catch (e) {
     console.error(e);
   }
