@@ -49,6 +49,6 @@ entry fun roll_dice_emit_event_mint_nft(r: &Random, ctx: &mut TxContext) {
     event::emit(DiceValue { value });
     transfer::transfer(
         Dice { id: object::new(ctx), value },
-        tx_context::sender(ctx),
+        ctx.sender(),
     );
 }

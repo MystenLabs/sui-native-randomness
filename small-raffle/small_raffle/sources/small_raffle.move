@@ -9,7 +9,6 @@ use sui::coin::{Self, Coin};
 use sui::random::{Self, Random, new_generator};
 use sui::sui::SUI;
 use sui::table::{Self, Table};
-use sui::tx_context::sender;
 
 /// Error codes
 const EGameInProgress: u64 = 0;
@@ -61,7 +60,7 @@ public fun play(game: &mut Game, coin: Coin<SUI>, clock: &Clock, ctx: &mut TxCon
 
     game.participants = game.participants + 1;
     coin::put(&mut game.balance, coin);
-    table::add(&mut game.participants_table, game.participants, sender(ctx));
+    table::add(&mut game.participants_table, game.participants, ctx.sender());
 }
 
 /// Anyone can close the game and send the balance to the winner.
