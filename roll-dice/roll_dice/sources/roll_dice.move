@@ -7,7 +7,7 @@
 module roll_dice::roll_dice;
 
 use sui::event;
-use sui::random::{Self, Random};
+use sui::random::Random;
 
 /// Struct: Dice
 /// A struct that represents a dice with a unique identifier and a value.
@@ -35,8 +35,8 @@ public struct DiceValue has copy, drop {
 /// Returns:
 /// - u8 - The result of the dice roll
 entry fun roll_dice_quiet(r: &Random, ctx: &mut TxContext): u8 {
-    let mut generator = random::new_generator(r, ctx); // generator is a PRG
-    random::generate_u8_in_range(&mut generator, 1, 6)
+    let mut generator = r.new_generator(ctx); // generator is a PRG
+    generator.generate_u8_in_range(1, 6)
 }
 
 /// Function: roll_dice_emit_event_mint_nft

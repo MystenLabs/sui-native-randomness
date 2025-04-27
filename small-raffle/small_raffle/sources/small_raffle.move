@@ -6,7 +6,7 @@ module small_raffle::small_raffle;
 use sui::balance::{Self, Balance};
 use sui::clock::{Self, Clock};
 use sui::coin::{Self, Coin};
-use sui::random::{Self, Random, new_generator};
+use sui::random::{Random, new_generator};
 use sui::sui::SUI;
 use sui::table::{Self, Table};
 
@@ -55,12 +55,12 @@ public fun create(end_time: u64, cost_in_sui: u64, ctx: &mut TxContext) {
 /// - ctx: Transaction context.
 public fun play(game: &mut Game, coin: Coin<SUI>, clock: &Clock, ctx: &mut TxContext) {
     assert!(game.end_time > clock::timestamp_ms(clock), EGameAlreadyCompleted);
-    assert!(coin::value(&coin) == game.cost_in_sui, EInvalidAmount);
+    assert!(coin.value() == game.cost_in_sui, EInvalidAmount);
     assert!(game.participants < MaxParticipants, EReachedMaxParticipants);
 
     game.participants = game.participants + 1;
     coin::put(&mut game.balance, coin);
-    table::add(&mut game.participants_table, game.participants, ctx.sender());
+    game.participants_table.add(game.participants, ctx.sender());
 }
 
 /// Anyone can close the game and send the balance to the winner.
@@ -81,26 +81,26 @@ entry fun close(game: Game, r: &Random, clock: &Clock, ctx: &mut TxContext) {
 
     if (participants == 1) {
         let winner = 1;
-        let winner_address = *table::borrow(&participants_table, winner);
+        let winner_address = *participants_table.borrow(winner);
         let reward = coin::from_balance(balance, ctx);
         transfer::public_transfer(reward, winner_address);
-        table::remove(&mut participants_table, 1);
+        participants_table.remove(1);
     } else if (participants > 1) {
         let mut generator = new_generator(r, ctx);
-        let winner = random::generate_u32_in_range(&mut generator, 1, participants);
-        let winner_address = *table::borrow(&participants_table, winner);
+        let winner = generator.generate_u32_in_range(1, participants);
+        let winner_address = *participants_table.borrow(winner);
         let reward = coin::from_balance(balance, ctx);
         transfer::public_transfer(reward, winner_address);
 
         let mut i = 1;
         while (i <= participants) {
-            table::remove(&mut participants_table, i);
+            participants_table.remove(i);
             i = i + 1;
         };
     } else {
-        balance::destroy_zero(balance);
+        balance.destroy_zero();
     };
 
-    table::destroy_empty(participants_table);
-    object::delete(id);
+    participants_table.destroy_empty();
+    id.delete();
 }
